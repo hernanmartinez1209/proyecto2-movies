@@ -1,4 +1,4 @@
-const {json} = require('express')
+// const {json} = require('express')
 
 const moviesControllers = require('./movies.controllers')
 
@@ -18,8 +18,9 @@ const getMoviesById = (req,res) =>{
     .then((data)=>{
         if(!data){
           res.status(404).json({message:"movies Undefined"})
-        }
+        }else{
         res.status(200).json(data)
+    }
     })
     .catch((err) =>{
         res.status(400).json({message:err})
@@ -36,8 +37,33 @@ const postMovies = (req,res) =>{
         res.status(400).json({message:err})
     })
 }
+const pachtMovies = (req,res) =>{
+    const objMovies = req.body
+    const idmovies = req.params.id
+    moviesControllers.upgradeMovies(objMovies,idmovies)
+     .then((data) =>{
+        if (!data) {
+            res.status(404).json({message:`users with id:${id}, not fount`})
+        }
+        res.status(200).json(data)
+     })
+     .catch(err =>console.log(err))
+}
+const deleteMovies = (req,res) =>{
+     const idMovies = req.params.id
+     moviesControllers.findMoviesById(idMovies)
+     .then((data) =>{
+        if (!data) {
+            res.status(404).json({message:`users with id:${id}, not fount`})
+        }
+        res.status(200).json(data)
+     })
+     .catch(err =>console.log(err))
+}
 module.exports = {
     getAllMovies,
     getMoviesById,
-    postMovies
+    postMovies,
+    pachtMovies,
+    deleteMovies
 }
